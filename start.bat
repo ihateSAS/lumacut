@@ -5,6 +5,10 @@ rem is present); the AI models (~830 MB) download on first start.
 setlocal
 cd /d "%~dp0"
 
+rem PyTorch has no builds for Windows on ARM (e.g. Snapdragon laptops).
+if /i "%PROCESSOR_ARCHITECTURE%"=="ARM64" goto arm
+if /i "%PROCESSOR_ARCHITEW6432%"=="ARM64" goto arm
+
 if exist ".venv\Scripts\python.exe" goto run
 
 set "PY="
@@ -41,6 +45,12 @@ echo Installing the rest ^(this can take a few minutes^)...
 :run
 ".venv\Scripts\python.exe" server.py
 exit /b %errorlevel%
+
+:arm
+echo This PC runs Windows on ARM, which the local AI models don't support yet.
+echo Use the online demo instead: https://ihatesas.github.io/lumacut/
+pause
+exit /b 1
 
 :fail
 echo.

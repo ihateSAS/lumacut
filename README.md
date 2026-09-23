@@ -15,7 +15,23 @@ You need:
 - **Python 3.10–3.13** — [python.org/downloads](https://www.python.org/downloads/) (on Windows, tick “Add python.exe to PATH”)
 - **Git** — [git-scm.com/downloads](https://git-scm.com/downloads)
 - About **2 GB of disk space** and **8 GB of RAM**
-- Best on an **Apple Silicon Mac** or a PC with an **NVIDIA GPU**. Other computers work too, just more slowly.
+- One of these systems (the ones PyTorch supports):
+  - **Mac with Apple Silicon** (M1 or newer) on **macOS 14 Sonoma or later**
+  - **Windows 10/11**, 64-bit Intel or AMD
+  - **Linux**, x86-64 or ARM64
+
+Intel Macs, macOS 13 or older, and Windows on ARM can’t run the local version — use the [online demo](https://ihatesas.github.io/lumacut/) instead.
+
+### What to expect on your computer
+
+| Your computer | How it runs | Speed |
+| --- | --- | --- |
+| Mac with Apple Silicon | On the built-in GPU | About 2–4 s per image (measured on an M5 with 16 GB) |
+| Windows or Linux with an NVIDIA GPU | On the GPU (CUDA), set up automatically | Fast; not benchmarked yet |
+| Windows or Linux without an NVIDIA GPU | On the CPU | Works, but much slower — see the tip below |
+| Anything else, or no install | Online demo, lighter model in your browser | A few seconds; less accurate on hair and fine edges |
+
+Tip for slower computers: start it with a lower matting resolution, e.g. `MATTE_SIDE=1024 ./start.sh` (Windows: `set MATTE_SIDE=1024` then `start.bat`). Edges are slightly less detailed but it’s noticeably faster. The server itself uses about 2 GB of memory.
 
 ### macOS / Linux
 
@@ -61,6 +77,7 @@ Delete the `lumacut` folder. Nothing is installed anywhere else. (Your saved ima
 | `./start.sh: Permission denied` | Run `chmod +x start.sh` once, or start it with `sh start.sh`. |
 | `Could not create a virtual environment` on Ubuntu/Debian | `sudo apt install python3-venv`, then run `./start.sh` again. |
 | “Lumacut needs Python 3.10 to 3.13” | Install a supported Python from python.org and try again. |
+| “This Mac can’t run the local version” | Intel Macs and macOS 13 or older aren’t supported by PyTorch — use the [online demo](https://ihatesas.github.io/lumacut/). |
 | Windows PC with an NVIDIA GPU is slow | Update your NVIDIA driver, delete the `.venv` folder, and run `start.bat` again so it installs the GPU build of PyTorch. |
 | Port 5173 is already in use | Start it on another port: `PORT=5180 ./start.sh` (Windows: `set PORT=5180` then `start.bat`). |
 | Something went wrong during setup | Delete the `.venv` folder and run the start script again. |
@@ -81,8 +98,6 @@ Environment variables: `PORT` (default 5173), `HOST` (127.0.0.1), `MATTE_SIDE` (
 | 2. Matting | A trimap is built from the mask: sure subject, sure background, and an unknown band around the edges. **ViTMatte** (Apache-2.0, trained on Distinctions-646) solves true alpha in the band at up to 1600 px, recovering hair, fur and whiskers | `server.py` (GPU, ~1.3–2 s) |
 | 3. Colour clean-up | Blur-fusion foreground estimation removes the old background colour from semi-transparent pixels, so there are no halos | `js/refine.worker.js` |
 | Fallback | Without the server (like the online demo), **RMBG-1.4** runs in the browser, and a guided filter snaps its edges to the photo before stage 3 | `js/engine.js` |
-
-Measured on an M5 MacBook with 16 GB of memory: about 2–4 seconds per image, with the server using about 2 GB of memory.
 
 ## Features
 

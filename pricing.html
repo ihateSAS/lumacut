@@ -53,10 +53,10 @@
       <table class="opts">
         <thead><tr><th>Setup</th><th>Model</th><th>Speed</th><th>Notes</th></tr></thead>
         <tbody>
-          <tr><td>Apple Silicon Mac</td><td>BiRefNet + ViTMatte</td><td>About 2–4 s per image</td><td>Measured on an M5 MacBook with 16 GB of memory</td></tr>
-          <tr><td>NVIDIA GPU (Windows / Linux)</td><td>BiRefNet + ViTMatte</td><td>Supported</td><td>Uses CUDA automatically; not benchmarked here</td></tr>
-          <tr><td>CPU only</td><td>BiRefNet + ViTMatte</td><td>Much slower</td><td>Works, but far slower than a GPU</td></tr>
-          <tr><td>Browser only (no server)</td><td>RMBG-1.4</td><td>A few seconds</td><td>No install; less accurate; licensed for non-commercial use only</td></tr>
+          <tr><td>Mac with Apple Silicon (macOS 14+)</td><td>BiRefNet + ViTMatte</td><td>About 2–4 s per image</td><td>Runs on the built-in GPU; measured on an M5 with 16 GB</td></tr>
+          <tr><td>Windows / Linux with an NVIDIA GPU</td><td>BiRefNet + ViTMatte</td><td>Fast</td><td>Uses CUDA automatically; not benchmarked yet</td></tr>
+          <tr><td>Windows / Linux without an NVIDIA GPU</td><td>BiRefNet + ViTMatte</td><td>Much slower</td><td>Runs on the CPU; a lower matting resolution helps</td></tr>
+          <tr><td>Intel Mac, macOS 13 or older, Windows on ARM</td><td>RMBG-1.4 (online demo)</td><td>A few seconds</td><td>The local version isn’t supported; use the online demo in your browser</td></tr>
         </tbody>
       </table>
     </div>

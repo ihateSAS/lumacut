@@ -5,6 +5,21 @@
 set -e
 cd "$(dirname "$0")"
 
+DEMO_URL="https://ihatesas.github.io/lumacut/"
+if [ "$(uname -s)" = "Darwin" ]; then
+  if [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" != "1" ] ||
+     [ "$(sw_vers -productVersion | cut -d. -f1)" -lt 14 ]; then
+    echo "This Mac can't run the local version: it needs Apple Silicon (M1 or newer) and macOS 14 or later."
+    echo "Use the online demo instead: $DEMO_URL"
+    exit 1
+  fi
+  if [ "$(uname -m)" != "arm64" ]; then
+    echo "Terminal is running under Rosetta (Intel emulation). Open it natively and run ./start.sh again."
+    echo "(Finder → Applications → Utilities → Terminal → Get Info → untick \"Open using Rosetta\".)"
+    exit 1
+  fi
+fi
+
 if [ ! -x .venv/bin/python ]; then
   PY=""
   for candidate in python3.13 python3.12 python3.11 python3.10 python3; do
