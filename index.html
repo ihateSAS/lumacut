@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lumacut – Remove image backgrounds for free</title>
+  <meta name="description" content="Remove the background from any photo in seconds. Automatic, full resolution and free — it runs on your own machine.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232463eb'/%3E%3Ccircle cx='12' cy='12' r='4.5' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<main>
+  <!-- Hero / upload -->
+  <section class="hero" id="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <div class="hero-media" aria-hidden="true">
+          <img src="assets/samples/portrait.jpg" alt="">
+          <div class="hero-cut"><img src="assets/samples/portrait.webp" alt=""></div>
+        </div>
+        <h1>Remove Image Backgrounds</h1>
+        <p class="hero-sub">Automatic, full resolution, and <span class="tag">free</span></p>
+      </div>
+
+      <div class="hero-upload">
+        <div class="upload-card" id="uploadCard">
+          <button class="btn btn-primary btn-xl" data-upload>Upload Image</button>
+          <p class="upload-alt"><strong>or drop a file,</strong><br><span class="small">paste an image or <button class="linkish" id="urlToggle">URL</button></span></p>
+          <form class="url-form" id="urlForm" hidden>
+            <input type="url" id="urlInput" placeholder="https://example.com/photo.jpg" required aria-label="Image URL">
+            <button class="btn btn-primary btn-sm" type="submit">Go</button>
+          </form>
+        </div>
+        <div class="samples">
+          <p>No image?<br>Try one of these:</p>
+          <div class="sample-row" id="samples"></div>
+        </div>
+        <p class="legal">Images are processed on your own machine and are never sent to a third party.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workspace (shown after an upload) -->
+  <section class="workspace" id="workspace" hidden>
+    <div class="container">
+      <div class="recent">
+        <div class="recent-row" id="recentRow"></div>
+        <div class="recent-links">
+          <a class="small" href="library.html">View all</a>
+          <button class="linkish small" id="clearHistory">Clear history</button>
+        </div>
+      </div>
+
+      <div class="ws-card">
+        <div class="ws-main">
+          <div class="ws-tabs" role="tablist">
+            <button role="tab" data-view="original">Original</button>
+            <button role="tab" data-view="result" aria-selected="true">Removed background</button>
+            <button role="tab" data-view="compare">Compare</button>
+          </div>
+          <div class="ws-preview" id="preview">
+            <div class="ws-stack" id="stack">
+              <canvas id="resultCanvas" class="checker"></canvas>
+              <canvas id="origCanvas"></canvas>
+              <div class="cmp-handle" id="cmpHandle" hidden><span></span></div>
+            </div>
+            <div class="ws-loading" id="loading" hidden>
+              <img id="loadingImg" alt="">
+              <div class="scan"></div>
+              <div class="ws-status">
+                <div class="spinner"></div>
+                <strong id="statusTitle">Removing background…</strong>
+                <span id="statusDetail" class="small"></span>
+                <div class="bar"><i id="statusBar"></i></div>
+              </div>
+            </div>
+            <div class="ws-error" id="errorBox" hidden>
+              <strong>Something went wrong</strong>
+              <p id="errorText" class="small"></p>
+              <button class="btn btn-ghost btn-sm" id="retryBtn">Try again</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ws-tools" aria-label="Edit">
+          <button class="tool" id="editBtn" disabled><span class="tool-icon">+</span>Background</button>
+          <button class="tool" id="brushBtn" disabled><span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 3.6a2 2 0 0 1 2.8 2.8L12 15.6 8.4 12z"/><path d="M8 13c-2.5 0-4 1.8-4 4 0 1.5-.8 2.5-2 3 4 1 9 0 9-4"/></svg></span>Erase / Restore</button>
+          <button class="tool" id="effectsBtn" disabled><span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></span>Effects</button>
+          <button class="tool" id="cropBtn" disabled><span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg></span>Crop</button>
+        </div>
+
+        <aside class="ws-side">
+          <button class="btn btn-primary btn-lg btn-block" id="downloadBtn" disabled>Download</button>
+          <p class="small muted center" id="downloadInfo">&nbsp;</p>
+          <div class="ws-opts">
+            <label class="field-inline"><span>Size</span>
+              <select id="sizeSelect">
+                <option value="full">Full resolution</option>
+                <option value="half">Half size</option>
+                <option value="preview">Preview (0.25 MP)</option>
+              </select>
+            </label>
+            <label class="field-inline"><span>Format</span>
+              <select id="formatSelect">
+                <option value="image/png">PNG</option>
+                <option value="image/webp">WebP</option>
+                <option value="image/jpeg">JPG (white)</option>
+              </select>
+            </label>
+          </div>
+          <button class="btn btn-ghost btn-block" id="copyBtn" disabled>Copy to clipboard</button>
+          <div class="quick-bg">
+            <h4>Background</h4>
+            <div class="swatches" id="quickBg"></div>
+          </div>
+          <div class="ws-model">
+            <h4>AI model</h4>
+            <select class="select select-block" id="modelSelect" aria-label="AI model"></select>
+            <p class="small muted" id="modelNote"></p>
+            <button class="btn btn-ghost btn-sm btn-block" id="rerunBtn" hidden>Re-run</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quality showcase -->
+  <section class="section" id="quality">
+    <div class="container">
+      <h2 class="section-title">Clean cut-outs, down to the hair</h2>
+      <div class="pill-tabs" id="scTabs" role="tablist"></div>
+      <div class="showcase" id="showcase">
+        <div class="sc-stage" id="scStage">
+          <img class="sc-before" id="scBefore" alt="">
+          <div class="sc-after checker" id="scAfterWrap"><img id="scAfter" alt=""></div>
+          <div class="sc-handle" id="scHandle"><span></span></div>
+        </div>
+        <p class="small muted center">Drag the slider. These are real Lumacut results, not retouched.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use cases -->
+  <section class="section section-grey" id="use-cases">
+    <div class="container">
+      <h2 class="section-title">One tool, lots of jobs</h2>
+      <div class="pill-tabs" id="ucTabs" role="tablist"></div>
+      <div class="uc-panel" id="ucPanel" role="tabpanel"></div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section" id="how">
+    <div class="container">
+      <h2 class="section-title">How it works</h2>
+      <ol class="steps">
+        <li><span class="step-n">1</span><h3>Add a photo</h3><p>Upload it, drag it onto the page, paste it from your clipboard, or use an image link.</p></li>
+        <li><span class="step-n">2</span><h3>We cut it out</h3><p>One model finds the subject, a second one works out the fine edges like hair and fur.</p></li>
+        <li><span class="step-n">3</span><h3>Download</h3><p>Keep it transparent or add a new background, crop it, then save as PNG, WebP or JPG.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-grey" id="faq">
+    <div class="container narrow">
+      <h2 class="section-title">Questions</h2>
+      <div class="faq">
+        <details><summary>Is it really free?</summary><p>Yes. The work happens on your own computer, so there’s nothing to pay per image — no credits, no watermarks, and full-resolution downloads are included.</p></details>
+        <details><summary>Are my images uploaded anywhere?</summary><p>Not to any third party. With the local server running, images go only to that server on your own machine; without it, they’re processed inside your browser tab. Your recent images are kept in your browser so you can come back to them, and you can delete them at any time in My images.</p></details>
+        <details><summary>Which AI model is used?</summary><p>With the local server running, a two-stage pipeline on your GPU: <strong>BiRefNet</strong> finds the subject, then <strong>ViTMatte</strong> works out true transparency along the edges, so hair, fur and whiskers come out as fine strands instead of a hard outline (about 2–4 seconds per image on an Apple Silicon Mac). Without the server, <strong>RMBG-1.4</strong> runs in your browser instead — quicker to start, but less accurate. Either way, edge colours are cleaned so there are no halos on new backgrounds.</p></details>
+        <details><summary>Which formats are supported?</summary><p>Anything your browser can open: JPG, PNG, WebP, GIF, BMP, AVIF and SVG in most browsers. Downloads are available as transparent PNG or WebP, or JPG with a white fill.</p></details>
+        <details><summary>What’s the maximum resolution?</summary><p>Images up to 4096 px on the long side are processed at full size; larger images are scaled down to that. Crops with padding or wider aspect ratios can export up to 8000 px.</p></details>
+        <details><summary>The result isn’t perfect. What can I do?</summary><p>Open <em>Erase / Restore</em> and paint over the areas that need fixing. Turn on “Show original faintly” to see what can be brought back. Undo and redo work with <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Z</kbd>.</p></details>
+        <details><summary>Can I use it commercially?</summary><p>The app code is yours. BiRefNet is MIT-licensed and ViTMatte is Apache-2.0. The in-browser fallback, RMBG-1.4, is licensed by BRIA AI for non-commercial use only — keep the local server running for commercial work.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final upload -->
+  <section class="section cta" id="start">
+    <div class="container cta-inner">
+      <h2 class="section-title">Remove a background now</h2>
+      <div class="upload-card upload-card-sm">
+        <button class="btn btn-primary btn-xl" data-upload>Upload Image</button>
+        <p class="upload-alt"><strong>or drop a file anywhere on this page</strong></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

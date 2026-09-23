@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pricing – Lumacut</title>
+  <meta name="description" content="Lumacut is free: no credits, no watermarks, no account. It runs on your own machine.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232463eb'/%3E%3Ccircle cx='12' cy='12' r='4.5' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<main class="container">
+  <div class="page-head center">
+    <span class="eyebrow">Pricing</span>
+    <h1>Free. Every feature, every image.</h1>
+    <p class="lead" style="margin-inline:auto">Lumacut runs on your own machine, so there’s nothing to meter — no credits, no watermarks, no account, no “HD costs extra”.</p>
+  </div>
+
+  <div class="price-grid">
+    <article class="plan featured price-main">
+      <h3>Lumacut</h3>
+      <div class="price">$0 <small>forever</small></div>
+      <ul class="checks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Unlimited images at full resolution (up to 4096 px in, 8000 px out)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Best-quality AI: BiRefNet + ViTMatte for hair, fur and fine edges</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Editor: backgrounds, erase/restore brush, shadow, crop, aspect ratios</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Bulk editor with ZIP download</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>My images: your history, re-editable, kept on this device</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>JavaScript SDK and local HTTP API</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Commercial use allowed with the default models (MIT / Apache-2.0)</li>
+      </ul>
+      <a class="btn btn-primary btn-block" href="index.html">Start removing backgrounds</a>
+    </article>
+
+    <article class="panel price-side">
+      <h3>What it costs instead</h3>
+      <p class="muted">You provide the computer. That’s it.</p>
+      <dl class="costs">
+        <div><dt>Disk</dt><dd>About 830 MB for the AI models, plus the Python environment</dd></div>
+        <div><dt>Memory</dt><dd>The local AI server uses about 2 GB while running</dd></div>
+        <div><dt>Setup</dt><dd>One command: <code>./start.sh</code> (the first run installs everything)</dd></div>
+        <div><dt>Your data</dt><dd>Stays on your machine. No uploads to third parties, no tracking.</dd></div>
+      </dl>
+    </article>
+  </div>
+
+  <section class="section-tight">
+    <h2 class="center">What you need</h2>
+    <div class="table-wrap">
+      <table class="opts">
+        <thead><tr><th>Setup</th><th>Model</th><th>Speed</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Apple Silicon Mac</td><td>BiRefNet + ViTMatte</td><td>About 2–4 s per image</td><td>Measured on an M5 MacBook with 16 GB of memory</td></tr>
+          <tr><td>NVIDIA GPU (Windows / Linux)</td><td>BiRefNet + ViTMatte</td><td>Supported</td><td>Uses CUDA automatically; not benchmarked here</td></tr>
+          <tr><td>CPU only</td><td>BiRefNet + ViTMatte</td><td>Much slower</td><td>Works, but far slower than a GPU</td></tr>
+          <tr><td>Browser only (no server)</td><td>RMBG-1.4</td><td>A few seconds</td><td>No install; less accurate; licensed for non-commercial use only</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <h2 class="center">Compared with paid cloud services</h2>
+    <p class="muted center">Cloud background removers are a good choice if you can’t install anything. Here’s how the trade-off typically looks.</p>
+    <div class="table-wrap">
+      <table class="opts compare-table">
+        <thead><tr><th></th><th>Lumacut</th><th>Typical paid cloud service</th></tr></thead>
+        <tbody>
+          <tr><td>Price</td><td>Free</td><td>Per-image credits or a monthly subscription</td></tr>
+          <tr><td>Full-resolution downloads</td><td>Always included</td><td>Often paid; free tiers are usually low-resolution previews</td></tr>
+          <tr><td>Account</td><td>None</td><td>Usually required</td></tr>
+          <tr><td>Where your images go</td><td>Your own machine</td><td>The provider’s servers</td></tr>
+          <tr><td>Setup</td><td>One-time install</td><td>None</td></tr>
+          <tr><td>Speed</td><td>Depends on your hardware</td><td>Fast, on the provider’s GPUs</td></tr>
+          <tr><td>Quality on hard edges</td><td>Open state-of-the-art models (BiRefNet + ViTMatte)</td><td>Proprietary models trained on large private datasets</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="narrow container faq" style="width:100%">
+      <h2 class="center">Questions</h2>
+      <details><summary>Why is it free?</summary><p>Because the work happens on your computer, each image costs nothing to process. There are no servers to pay for and nothing to sell.</p></details>
+      <details><summary>Can I use the results commercially?</summary><p>Yes, with the default models: BiRefNet is MIT-licensed and ViTMatte is Apache-2.0. The in-browser fallback (RMBG-1.4), used only when the local server isn’t running, is licensed for non-commercial use.</p></details>
+      <details><summary>Can my team use one shared install?</summary><p>Yes — run the server on one machine with a GPU, started with <code>HOST=0.0.0.0 ./start.sh</code> so others on your network can reach it (by default it only listens to your own computer). It has no log-in built in, so only do this on a network you trust, or put your own authentication in front of it.</p></details>
+      <details><summary>Are there any limits?</summary><p>Only your hardware: input images are processed at up to 4096 px on the long side, and your history keeps up to 500 images (you choose the limit in <a href="library.html">My images</a>).</p></details>
+    </div>
+  </section>
+</main>
+<script type="module">
+  import { mountChrome } from './js/common.js';
+  mountChrome('pricing');
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-upload]')) location.href = 'index.html';
+  });
+</script>
+</body>
+</html>

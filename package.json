@@ -1,0 +1,9 @@
+{
+  "name": "lumacut",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Background remover: static web app plus a local GPU server running BiRefNet + ViTMatte.",
+  "scripts": {
+    "start": "sh start.sh"
+  }
+}

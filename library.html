@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My images – Lumacut</title>
+  <meta name="description" content="Every background you’ve removed, saved on this device.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232463eb'/%3E%3Ccircle cx='12' cy='12' r='4.5' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+</head>
+<body>
+<main class="container">
+  <div class="page-head lib-head">
+    <div>
+      <h1>My images</h1>
+      <p class="lead" id="libSummary">Every background you remove is saved here, on this device only.</p>
+    </div>
+    <a class="btn btn-primary" href="index.html">Remove another background</a>
+  </div>
+
+  <div class="lib-toolbar panel">
+    <input type="search" id="search" class="lib-search" placeholder="Search by file name" aria-label="Search by file name">
+    <label class="field-inline"><span>Sort</span>
+      <select id="sort">
+        <option value="new">Newest first</option>
+        <option value="old">Oldest first</option>
+        <option value="name">Name A–Z</option>
+      </select>
+    </label>
+    <span class="spacer"></span>
+    <label class="field-inline"><span>Format</span>
+      <select id="format">
+        <option value="image/png">PNG</option>
+        <option value="image/webp">WebP</option>
+        <option value="image/jpeg">JPG</option>
+      </select>
+    </label>
+    <label class="field-inline"><span>Size</span>
+      <select id="size">
+        <option value="full">Full</option>
+        <option value="half">Half</option>
+        <option value="preview">Preview</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="lib-selbar" id="selbar" hidden>
+    <strong id="selCount"></strong>
+    <button class="linkish small" id="selAll">Select all</button>
+    <button class="linkish small" id="selNone">Clear selection</button>
+    <span class="spacer"></span>
+    <button class="btn btn-ghost btn-sm" id="delSel">Delete</button>
+    <button class="btn btn-primary btn-sm" id="zipSel">Download as ZIP</button>
+  </div>
+
+  <div class="lib-grid" id="grid"></div>
+
+  <div class="empty lib-empty" id="empty" hidden>
+    <p><strong>No images yet.</strong></p>
+    <p>Remove a background on the <a href="index.html">home page</a> or in the <a href="bulk.html">bulk editor</a> and it will show up here.</p>
+  </div>
+
+  <section class="panel lib-settings">
+    <h3>Storage</h3>
+    <p class="small muted" id="usage">Checking storage…</p>
+    <div class="lib-settings-row">
+      <label class="field-inline"><span>Keep up to</span><select id="limit"></select></label>
+      <button class="btn btn-ghost btn-sm" id="deleteAll">Delete all images</button>
+    </div>
+    <p class="small muted">Images are stored in this browser (IndexedDB), including the original photo, the mask and your edits, so you can re-open and keep editing them. When the limit is reached, the oldest images are removed first. Clearing your browser’s site data also removes them.</p>
+  </section>
+</main>
+<script type="module" src="js/library.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Developers – Lumacut SDK</title>
+  <meta name="description" content="Add background removal to any web app with one function call. Runs in the browser — no API key needed.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232463eb'/%3E%3Ccircle cx='12' cy='12' r='4.5' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<main class="container">
+  <div class="page-head">
+    <h1>Background removal for your app</h1>
+    <p class="lead">The Lumacut SDK is a small ES module. Call one function, get back a PNG. Inference runs on the user’s device, so there are no keys, quotas or per-image fees.</p>
+  </div>
+
+  <div class="docs">
+    <nav class="docs-nav">
+      <a href="#quickstart">Quick start</a>
+      <a href="#options">Options</a>
+      <a href="#progress">Progress events</a>
+      <a href="#advanced">Advanced</a>
+      <a href="#playground">Playground</a>
+      <a href="#server">Server-side use</a>
+    </nav>
+    <div class="docs-body">
+      <h2 id="quickstart">Quick start</h2>
+      <p>Copy the <code>js/</code> folder into your project (or serve this site) and import the SDK:</p>
+<pre class="code"><code><span class="tok-k">import</span> { removeBackground } <span class="tok-k">from</span> <span class="tok-s">'./js/sdk.js'</span>;
+
+<span class="tok-k">const</span> input = document.querySelector(<span class="tok-s">'input[type=file]'</span>);
+input.addEventListener(<span class="tok-s">'change'</span>, <span class="tok-k">async</span> () =&gt; {
+  <span class="tok-k">const</span> png = <span class="tok-k">await</span> <span class="tok-f">removeBackground</span>(input.files[<span class="tok-s">0</span>]);
+  document.querySelector(<span class="tok-s">'img'</span>).src = URL.<span class="tok-f">createObjectURL</span>(png);
+});</code></pre>
+      <p><code>input</code> can be a <code>File</code>/<code>Blob</code>, an image URL (the host must allow CORS), an <code>&lt;img&gt;</code>, a <code>&lt;canvas&gt;</code> or an <code>ImageBitmap</code>. Calls are queued, so it’s safe to fire many at once.</p>
+      <p>Not using modules? Include <code>&lt;script type="module" src="js/sdk.js"&gt;&lt;/script&gt;</code> and use <code>window.Lumacut.removeBackground()</code>.</p>
+
+      <h2 id="options">Options</h2>
+      <div class="table-wrap">
+      <table class="opts">
+        <thead><tr><th>Option</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>format</code></td><td><code>'image/png'</code></td><td><code>'image/png'</code>, <code>'image/webp'</code> or <code>'image/jpeg'</code> (JPEG gets a white fill).</td></tr>
+          <tr><td><code>background</code></td><td>transparent</td><td>Any CSS colour, or <code>'blur'</code> to keep a blurred version of the original scene.</td></tr>
+          <tr><td><code>blur</code></td><td><code>40</code></td><td>Blur strength 1–100 when <code>background: 'blur'</code>.</td></tr>
+          <tr><td><code>crop</code></td><td><code>false</code></td><td>Crop the output tightly to the subject.</td></tr>
+          <tr><td><code>padding</code></td><td><code>0.08</code></td><td>Margin around the subject when cropping, as a fraction of the subject size.</td></tr>
+          <tr><td><code>ratio</code></td><td>original</td><td>Force an aspect ratio (width ÷ height), e.g. <code>1</code> for square, <code>4/5</code> for portrait.</td></tr>
+          <tr><td><code>shadow</code></td><td><code>false</code></td><td>Add a soft drop shadow under the subject.</td></tr>
+          <tr><td><code>size</code></td><td><code>'full'</code></td><td><code>'full'</code>, <code>'half'</code> or <code>'preview'</code> (≈0.25 megapixels).</td></tr>
+          <tr><td><code>model</code></td><td><code>'auto'</code></td><td><code>'birefnet'</code> (BiRefNet + ViTMatte, needs the local server), <code>'rmbg'</code> (in-browser) or <code>'auto'</code>.</td></tr>
+          <tr><td><code>quality</code></td><td><code>0.92</code></td><td>Encoder quality for JPEG and WebP.</td></tr>
+        </tbody>
+      </table>
+      </div>
+<pre class="code"><code><span class="tok-c">// Square product shot on white with a shadow, as JPEG</span>
+<span class="tok-k">const</span> jpg = <span class="tok-k">await</span> <span class="tok-f">removeBackground</span>(file, {
+  format: <span class="tok-s">'image/jpeg'</span>, background: <span class="tok-s">'#ffffff'</span>,
+  crop: <span class="tok-k">true</span>, padding: <span class="tok-s">0.1</span>, ratio: <span class="tok-s">1</span>, shadow: <span class="tok-k">true</span>,
+});</code></pre>
+
+      <h2 id="progress">Progress events</h2>
+      <p>With the local server running (<code>./start.sh</code>), images go through BiRefNet + ViTMatte on your GPU; otherwise RMBG-1.4 downloads on first use (~45–176 MB) and runs in the browser. Pick one explicitly with <code>model: 'birefnet'</code> or <code>model: 'rmbg'</code>. Subscribe to status updates to show progress, or call <code>loadModel()</code> early to warm up the in-browser model.</p>
+<pre class="code"><code><span class="tok-k">import</span> { onStatus, loadModel } <span class="tok-k">from</span> <span class="tok-s">'./js/sdk.js'</span>;
+
+<span class="tok-f">onStatus</span>(({ stage, progress, loaded, total, device }) =&gt; {
+  <span class="tok-c">// stage: 'idle' | 'loading' | 'ready' | 'processing' | 'error'</span>
+  console.<span class="tok-f">log</span>(stage, Math.<span class="tok-f">round</span>(progress * <span class="tok-s">100</span>) + <span class="tok-s">'%'</span>, device);
+});
+<span class="tok-f">loadModel</span>(); <span class="tok-c">// optional pre-warm</span></code></pre>
+
+      <h2 id="advanced">Advanced</h2>
+      <p><code>getMask(input)</code> returns the raw alpha mask as a canvas. <code>createProject(input, options)</code> returns the same <code>Project</code> object the editor uses — change <code>project.state</code> and call <code>project.toBlob()</code> or <code>project.renderToCanvas()</code>.</p>
+<pre class="code"><code><span class="tok-k">import</span> { createProject } <span class="tok-k">from</span> <span class="tok-s">'./js/sdk.js'</span>;
+<span class="tok-k">const</span> project = <span class="tok-k">await</span> <span class="tok-f">createProject</span>(file);
+<span class="tok-k">for</span> (<span class="tok-k">const</span> color <span class="tok-k">of</span> [<span class="tok-s">'#fde68a'</span>, <span class="tok-s">'#93c5fd'</span>]) {
+  project.state.bg = { ...project.state.bg, type: <span class="tok-s">'color'</span>, color };
+  variants.<span class="tok-f">push</span>(<span class="tok-k">await</span> project.<span class="tok-f">toBlob</span>());
+}</code></pre>
+
+      <h2 id="playground">Playground</h2>
+      <p>Run the SDK live on a sample image.</p>
+      <div class="playground">
+        <div class="pg-controls panel">
+          <label class="field-inline"><span>Image</span>
+            <select id="pgImage">
+              <option value="1542291026-7eec264c27ff">Sneaker</option>
+              <option value="1543466835-00a7907e9de1">Dog</option>
+              <option value="1523275335684-37898b6baf30">Watch</option>
+            </select></label>
+          <label class="field-inline"><span>background</span>
+            <select id="pgBg">
+              <option value="">transparent</option>
+              <option value="#ffffff">'#ffffff'</option>
+              <option value="#fde68a">'#fde68a'</option>
+              <option value="blur">'blur'</option>
+            </select></label>
+          <label class="field-inline"><span>ratio</span>
+            <select id="pgRatio"><option value="">original</option><option value="1">1</option><option value="0.8">4/5</option></select></label>
+          <label class="check"><input type="checkbox" id="pgCrop" checked> crop</label>
+          <label class="check"><input type="checkbox" id="pgShadow"> shadow</label>
+<pre class="code" id="pgCode"></pre>
+          <button class="btn btn-primary" id="pgRun">Run</button>
+          <p class="small muted" id="pgStatus"></p>
+        </div>
+        <div class="pg-out checker" id="pgOut"><span class="muted">Output appears here</span></div>
+      </div>
+
+      <h2 id="server">Server-side use</h2>
+      <p>The bundled server (<code>server.py</code>) runs BiRefNet and ViTMatte with PyTorch on Apple GPUs (MPS), NVIDIA GPUs (CUDA) or the CPU. <code>POST /api/matte</code> takes an image (JPEG/PNG body) and returns a grayscale PNG alpha matte at up to 1600 px; <code>GET /api/status</code> reports <code>loading</code> / <code>warming</code> / <code>ready</code> plus per-stage timings. To expose it publicly, put your own auth in front of it and run it on a GPU machine.</p>
+    </div>
+  </div>
+</main>
+<script type="module" src="js/dev.js"></script>
+</body>
+</html>

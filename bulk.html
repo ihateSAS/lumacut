@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bulk background remover – Lumacut</title>
+  <meta name="description" content="Remove backgrounds from many images at once and download them as a ZIP.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232463eb'/%3E%3Ccircle cx='12' cy='12' r='4.5' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+</head>
+<body>
+<main class="container">
+  <div class="page-head">
+    <h1>Bulk background remover</h1>
+    <p class="lead">Add as many images as you like, choose your output once, and download them all as a ZIP. Everything runs on your own machine.</p>
+  </div>
+
+  <div class="bulk-grid">
+    <aside class="panel bulk-opts">
+      <h3>AI model</h3>
+      <select class="select select-block" id="optModel" aria-label="AI model"></select>
+      <p class="small muted" id="modelNote"></p>
+      <h3>Output settings</h3>
+      <label class="field-inline"><span>Background</span>
+        <select id="optBg">
+          <option value="none">Transparent</option>
+          <option value="#ffffff">White</option>
+          <option value="#000000">Black</option>
+          <option value="#f1f2f6">Light gray</option>
+          <option value="custom">Custom color…</option>
+          <option value="blur">Blur original</option>
+        </select>
+      </label>
+      <label class="field-inline" id="customColorRow" hidden><span>Color</span><input type="color" id="optColor" value="#5b3df5"></label>
+      <label class="switch"><input type="checkbox" id="optTrim"><span></span> Crop to subject</label>
+      <label class="field" id="padRow"><span>Padding <output id="padOut">8%</output></span>
+        <input type="range" id="optPad" min="0" max="50" value="8"></label>
+      <label class="field-inline"><span>Aspect ratio</span>
+        <select id="optRatio">
+          <option value="0">Original</option>
+          <option value="1">1:1 square</option>
+          <option value="0.8">4:5 portrait</option>
+          <option value="1.5">3:2 landscape</option>
+          <option value="1.7778">16:9 wide</option>
+        </select>
+      </label>
+      <label class="switch"><input type="checkbox" id="optShadow"><span></span> Drop shadow</label>
+      <label class="field-inline"><span>Format</span>
+        <select id="optFormat">
+          <option value="image/png">PNG</option>
+          <option value="image/webp">WebP</option>
+          <option value="image/jpeg">JPG</option>
+        </select>
+      </label>
+      <label class="field-inline"><span>Size</span>
+        <select id="optSize">
+          <option value="full">Full resolution</option>
+          <option value="half">Half size</option>
+          <option value="preview">Preview (0.25 MP)</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" id="optSave" checked> Save results to <a href="library.html">My images</a></label>
+      <p class="small muted">Settings apply to every image, including ones already processed. You can fine-tune any single image with the edit button.</p>
+    </aside>
+
+    <section>
+      <div class="dropzone">
+        <button class="btn btn-primary btn-lg" data-upload>Add images</button>
+        <p>or drop files anywhere · paste with <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>V</kbd></p>
+      </div>
+      <div class="bulk-bar">
+        <strong id="count">No images yet</strong>
+        <span class="spacer"></span>
+        <button class="btn btn-ghost btn-sm" id="clearBtn" disabled>Clear all</button>
+        <button class="btn btn-primary btn-sm" id="zipBtn" disabled>Download all (ZIP)</button>
+        <div class="bar bulk-progress" id="progress" hidden><i id="progressBar"></i></div>
+      </div>
+      <p class="small muted" id="modelStatus"></p>
+      <div class="bulk-list" id="list"></div>
+      <p class="empty" id="empty">Your processed images will appear here.</p>
+    </section>
+  </div>
+</main>
+<script type="module" src="js/bulk.js"></script>
+</body>
+</html>
