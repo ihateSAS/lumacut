@@ -1,5 +1,5 @@
 import {
-  $, $$, esc, mountChrome, initInput, toast, history, downloadBlob, copyImageToClipboard, nameFromUrl, formatBytes, ICONS,
+  $, $$, esc, mountChrome, initInput, toast, history, downloadBlob, copyImageToClipboard, nameFromUrl, formatBytes, ICONS, REPO_URL,
 } from './common.js';
 import { segment, onStatus, MODELS, getPreferredModel } from './engine.js';
 import { mountModelPicker, modelNotes } from './model-picker.js';
@@ -276,7 +276,14 @@ el.rerun.addEventListener('click', () => {
   const item = current();
   if (item?.project) processItem(item);
 });
-mountModelPicker(el.model, { onChange: updateModelUI }).then(updateModelUI);
+mountModelPicker(el.model, { onChange: updateModelUI }).then((caps) => {
+  updateModelUI();
+  // Served without the local AI server (e.g. GitHub Pages): say so and link to the install guide.
+  if (!caps.server) {
+    $('#installLink').href = `${REPO_URL}#install`;
+    $('#demoNote').hidden = false;
+  }
+});
 
 $('#retryBtn').addEventListener('click', () => {
   const item = current();

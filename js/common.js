@@ -28,6 +28,8 @@ export async function copyImageToClipboard(blobPromise) {
   await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]);
 }
 
+export const REPO_URL = 'https://github.com/ihateSAS/lumacut';
+
 export const LOGO = `<svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
   <rect width="32" height="32" rx="8" fill="#2463eb"/>
   <circle cx="12" cy="12" r="4.5" fill="#fff"/>
@@ -98,7 +100,7 @@ export function mountChrome(active) {
       <div><h4>Developers</h4><a href="developers.html">JavaScript SDK</a><a href="developers.html#playground">Playground</a><a href="developers.html#options">Options</a></div>
     </div>
     <div class="container footer-bottom small muted">
-      <span>© ${new Date().getFullYear()} Lumacut</span>
+      <span>© ${new Date().getFullYear()} Lumacut · <a href="${REPO_URL}" target="_blank" rel="noopener">Source on GitHub</a> (MIT)</span>
       <span>AI models: <a href="https://huggingface.co/ZhengPeng7/BiRefNet" target="_blank" rel="noopener">BiRefNet</a>, <a href="https://huggingface.co/hustvl/vitmatte-base-distinctions-646" target="_blank" rel="noopener">ViTMatte</a>, <a href="https://huggingface.co/briaai/RMBG-1.4" target="_blank" rel="noopener">RMBG-1.4</a></span>
     </div>`;
   document.body.append(footer);
